@@ -15,33 +15,40 @@ public class CharacterController : MonoBehaviour
 
     public GameObject cannon;
     public GameObject bullet;
+    public AudioClip shootAudio; // Assign the shoot audio clip in the Unity Editor
+
+    private AudioSource audioSource;
 
     Rigidbody rb;
     Transform t;
+    public Score scoreManager;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         t = GetComponent<Transform>();
+        // Initialize the AudioSource component
+        audioSource = GetComponent<AudioSource>();
+        scoreManager = FindObjectOfType<Score>().GetComponent<Score>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Time.deltaTime represents the time that passed since the last frame
-        //the multiplication below ensures that GameObject moves constant speed every frame
-        if (Input.GetKey(KeyCode.W))
-            rb.velocity += this.transform.forward * speed * Time.deltaTime;
-        else if (Input.GetKey(KeyCode.S))
-            rb.velocity -= this.transform.forward * speed * Time.deltaTime;
+        // Rotation based on mouse movement
+        float mouseX = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up * mouseX * rotationSpeed);
 
-        // Quaternion returns a rotation that rotates x degrees around the x axis and so on
-        if (Input.GetKey(KeyCode.D))
-            t.rotation *= Quaternion.Euler(0, rotationSpeed * Time.deltaTime, 0);
-        else if (Input.GetKey(KeyCode.A))
-            t.rotation *= Quaternion.Euler(0, - rotationSpeed * Time.deltaTime, 0);
-        
+        // Movement based on WASD keys
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(horizontal, 0f, vertical).normalized;
+        transform.Translate(movement * speed * Time.deltaTime);
+
+
         if (Input.GetKeyDown(KeyCode.Space))
             rb.AddForce(t.up * force);
 
@@ -50,6 +57,9 @@ public class CharacterController : MonoBehaviour
             GameObject newBullet = GameObject.Instantiate(bullet, cannon.transform.position, cannon.transform.rotation) as GameObject;
             //newBullet.GetComponent<Rigidbody>().velocity += Vector3.up * 2;
             newBullet.GetComponent<Rigidbody>().AddForce(newBullet.transform.forward * bulletSpeed);
+
+            audioSource.PlayOneShot(shootAudio); // Play the shoot audio
+            Destroy(newBullet, 5f);
         }
 
         if (Input.GetKey(KeyCode.Q))
@@ -58,5 +68,13 @@ public class CharacterController : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "bulletb")
+        {
+            scoreManager.SubPoint();
+        }
     }
 }

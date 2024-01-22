@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FatherRoutine : MonoBehaviour
 {
@@ -17,10 +19,27 @@ public class FatherRoutine : MonoBehaviour
 
     public bool playMode = true;
 
+    public TMP_Text timerText;
+    public GameObject timerUI;
+    public GameObject redLight;
+
+    private Vector3 originalFatherPosition;
+    private Quaternion originalFatherRotation;
+
+    public AudioClip panicAudio; // Assign the shoot audio clip in the Unity Editor
+
+    private AudioSource audioSource;
+
     private void Start()
     {
         // Start the event coroutine
         StartCoroutine(EventCoroutine());
+
+        // Store the original position and rotation of the father
+        originalFatherPosition = fatherFigure.transform.position;
+        originalFatherRotation = fatherFigure.transform.rotation;
+
+        audioSource = player.gameObject.GetComponent<AudioSource>();
     }
 
     private IEnumerator EventCoroutine()
@@ -36,8 +55,9 @@ public class FatherRoutine : MonoBehaviour
             // Wait for the rotation time
             yield return new WaitForSeconds(rotationTime);
 
-            CheckforT();
+            //CheckforT();
             // Deactivate the event
+            DeactivateEvent();
 
         }
     }
@@ -57,18 +77,15 @@ public class FatherRoutine : MonoBehaviour
     {
 
         brother.gameObject.GetComponent<Brotherscript>().playMode = false;
-
+        audioSource.clip = panicAudio;
+        audioSource.loop = true;
+        audioSource.Play();
         // Activate the father figure (raise from below the ground)
         fatherFigure.SetActive(true);
         playMode = true;
-        // Rotate the father figure over the specified rotation time
-        StartCoroutine(RotateFatherFigure());
 
-        // Lerp and raise the father figure
-        StartCoroutine(LerpAndRaiseFatherFigure(fatherFigure.transform));
-
-        // Rotate the father figure towards the player
-        RotateFatherFigure(fatherFigure.transform);
+        fatherFigure.GetComponent<Animation>().PlayQueued("fatherEntry");
+        StartCountdown();
 
         // Instantiate targets at the origin (0, 0, 0)
         Instantiate(targets, Vector3.zero, Quaternion.identity);
@@ -76,52 +93,80 @@ public class FatherRoutine : MonoBehaviour
 
     private void DeactivateEvent()
     {
-        // Deactivate the father figure (go back down)
 
-        brother.gameObject.GetComponent<Brotherscript>().playMode = false;
-        fatherFigure.SetActive(false);
-        playMode = false;
+        // Check if there are any remaining targets in the scene
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("target");
 
-        // Resume the game (player and AI can continue playing catch)
-        // Implement any additional logic you need for game resumption
+            if (targets.Length == 0)
+            {
+            // No targets remaining, reset father to original position and rotation
+                fatherFigure.transform.position = originalFatherPosition;
+                fatherFigure.transform.rotation = originalFatherRotation;
+
+                // After the countdown
+                timerUI.SetActive(false);
+                redLight.SetActive(false);
+                fatherFigure.SetActive(false);
+
+                brother.gameObject.GetComponent<Brotherscript>().playMode = true;
+
+                playMode = true;
+
+                audioSource.Stop();
+                audioSource.loop = false;
+                StartCoroutine(EventCoroutine());
+                timerText.text = 15.ToString();
+                brother.gameObject.GetComponent<Brotherscript>().startShoot();
+            }
+            else
+            {
+                // Targets still remaining, print Game Over
+                Debug.Log("Game Over");
+                timerText.text = "GAME OVER";
+            }
     }
 
-    private IEnumerator RotateFatherFigure()
+    private void StartCountdown()
     {
-        float elapsedTime = 0f;
+        // Activate the timer UI and red light
+        timerUI.SetActive(true);
+        redLight.SetActive(true);
 
-        while (elapsedTime < 15)
+
+        // Start the countdown coroutine and panic mode coroutine simultaneously
+        StartCoroutine(CountdownCoroutine());
+        StartCoroutine(PanicModeCoroutine());
+    }
+
+    private IEnumerator CountdownCoroutine()
+    {
+        int timeRemaining = 15;
+
+        while (timeRemaining > 0)
         {
-            // Rotate the father figure towards the player
-            fatherFigure.transform.LookAt(player.position);
+            // Update the timer text
+            timerText.text = timeRemaining.ToString();
 
-            // Increment the elapsed time
-            elapsedTime += Time.deltaTime;
+            // Wait for one second
+            yield return new WaitForSeconds(1f);
 
-            yield return null;
+            // Decrease the time remaining
+            timeRemaining--;
         }
+
+
     }
 
-    private IEnumerator LerpAndRaiseFatherFigure(Transform fatherTransform)
+    private IEnumerator PanicModeCoroutine()
     {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < lerpTime)
+        while (!playMode)
         {
-            // Lerp the position to raise the father figure
-            fatherTransform.position = Vector3.Lerp(fatherTransform.position, new Vector3(0, 0, raiseHeight), elapsedTime / lerpTime);
+            // Toggle the state of the red light every half second
+            redLight.SetActive(!redLight.activeSelf);
 
-            // Increment the elapsed time
-            elapsedTime += Time.deltaTime;
-
-            yield return null;
+            // Wait for half a second
+            yield return new WaitForSeconds(0.5f);
         }
-    }
-
-    private void RotateFatherFigure(Transform fatherTransform)
-    {
-        // Rotate the father figure towards the player
-        fatherTransform.LookAt(player.position, Vector3.up);
     }
 
 }

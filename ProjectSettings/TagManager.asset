@@ -7,6 +7,7 @@ TagManager:
   - AI
   - bullet
   - target
+  - bulletb
   layers:
   - Default
   - TransparentFX

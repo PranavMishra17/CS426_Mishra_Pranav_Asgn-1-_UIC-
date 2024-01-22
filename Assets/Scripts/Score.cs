@@ -26,6 +26,20 @@ public class Score : MonoBehaviour
         score++;
 
         scoreText.text = "Score: " + score;
+
+        if(score >= maxScore)
+        {
+            score = 0;
+            scoreText.text = "YOU WON!";
+        }
        
+    }
+
+    public void SubPoint()
+    {
+        score--;
+
+        scoreText.text = "Score: " + score;
+
     }
 }
