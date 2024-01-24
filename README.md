@@ -20,3 +20,6 @@ Project idea: I used the given bb8 models and the code to make this game, which 
 7. I changed the bb8 player controller character so as to look around with mouse, instead of rotating with Q and E only.
 8. There are invisible walls behind the players which stops the balls within bounds. however the balls are destroyed after 5 seconds each.
 9. Light effect here is the red siren light which switches on when the timer goes on and vice versa.
+
+How to play:
+Download the files in the #'builds' folder and run the .exe file in your system
