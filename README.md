@@ -22,4 +22,4 @@ Project idea: I used the given bb8 models and the code to make this game, which 
 9. Light effect here is the red siren light which switches on when the timer goes on and vice versa.
 
 How to play:
-Download the files in the #'builds' folder and run the .exe file in your system
+Download the files in the # [a relative link](path%20with%20spaces/other_file.md) folder and run the .exe file in your system
