@@ -1,6 +1,6 @@
 # GamedevAssignment1
 
-**Gameplay:** [Youtube](https://www.youtube.com/watch?v=Ft3ulkJvuy8)
+**Gameplay:** [Youtube](https://youtu.be/zdX3eWxdtuk?si=A3GWWJAwf83TIdVx)
 (I made few changes after publishing this video such as adding invisible walls, but the gameplay remians the same)
 
  
