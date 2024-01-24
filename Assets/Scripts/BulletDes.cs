@@ -18,6 +18,10 @@ public class BulletDes : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "AI" || collision.gameObject.tag == "target") { Destroy(gameObject); }
+        if(collision.gameObject.tag == "AI" || collision.gameObject.tag == "target") 
+        { 
+            gameObject.GetComponent<Rigidbody>().useGravity = true;
+           // gameObject.tag = "bulletb"; 
+        }
     }
 }

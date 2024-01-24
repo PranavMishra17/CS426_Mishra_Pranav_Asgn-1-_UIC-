@@ -430,20 +430,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!136 &296794334
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296794331}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1.2712991
-  m_Height: 2.5425982
-  m_Direction: 1
-  m_Center: {x: 0.7256409, y: 0.22535376, z: 0}
 --- !u!54 &296794335
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -460,6 +446,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!65 &296794336
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 296794331}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.6237657, y: 1.9311979, z: 0.614222}
+  m_Center: {x: 0.6496887, y: 0.26520044, z: -0.192889}
 --- !u!1 &346562021
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,7 +603,7 @@ MonoBehaviour:
   speed: 15
   rotationSpeed: 7.5
   force: 200
-  bulletSpeed: 1200
+  bulletSpeed: 1500
   cannon: {fileID: 1989386331}
   bullet: {fileID: 7228326156637737583, guid: 3c071a31723be4d4a9d12f6bc23c4c55, type: 3}
   shootAudio: {fileID: 8300000, guid: 53bd6881f1105b04fad798b2ac2fe3b3, type: 3}

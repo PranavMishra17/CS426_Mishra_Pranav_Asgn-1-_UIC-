@@ -120,9 +120,9 @@ public class Brotherscript : MonoBehaviour
     private void GenerateRandomDashParameters()
     {
         // Generate random parameters for each dash
-        dashSpeed = Random.Range(2f, 5f); // Adjust as needed
+        dashSpeed = Random.Range(0.5f, 2f); // Adjust as needed
         dashLength = Random.Range(2f, 5f); // Adjust as needed
-        dashFrequency = Random.Range(0.5f, 1.5f); // Adjust as needed
+        dashFrequency = Random.Range(2f, 4f); // Adjust as needed
     }
 
     private void AimAtPlayer()

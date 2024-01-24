@@ -19,6 +19,6 @@ public class Target : MonoBehaviour
         // printing if collision is detected on the console
         Debug.Log("Collision Detected");
         //after collision is detected destroy the gameobject
-        Destroy(gameObject, 5f);
+        Destroy(gameObject);
     }
 }
