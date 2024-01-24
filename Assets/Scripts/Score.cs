@@ -8,7 +8,7 @@ using TMPro;
 public class Score : MonoBehaviour
 {
     public TMP_Text scoreText;
-    public int maxScore = 5;
+    public int maxScore = 10;
 
     int score;
 
